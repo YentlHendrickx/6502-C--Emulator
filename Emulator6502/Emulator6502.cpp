@@ -362,8 +362,397 @@ microMos6502::microMos6502(BusRead r, BusWrite w) {
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
     InstructTable[0xC8] = instr;
+
+
+    /// JMP
+    instr.code = &microMos6502::Op_JMP;
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 3;
+    InstructTable[0x4C] = instr;
+
+    instr.addr = &microMos6502::ABI_Addr;
+    instr.cycles = 5;
+    InstructTable[0x6C] = instr;
+
+    /// JSR
+    instr.code = &microMos6502::Op_JSR;
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 6;
+    InstructTable[0x20] = instr;
+
+    /// LDA
+    instr.code = &microMos6502::Op_LDA;
+    instr.addr = &microMos6502::IMM_Addr;
+    instr.cycles = 2;
+    InstructTable[0xA9] = instr;
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0xA5] = instr;
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 4;
+    InstructTable[0xB5] = instr;
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0xAD] = instr;
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 4;
+    InstructTable[0xBD] = instr;
+
+    instr.addr = &microMos6502::ABY_Addr;
+    instr.cycles = 4;
+    InstructTable[0xB9] = instr;
+
+    instr.addr = &microMos6502::INX_Addr;
+    instr.cycles = 6;
+    InstructTable[0xA1] = instr;
+
+    instr.addr = &microMos6502::INY_Addr;
+    instr.cycles = 5;
+    InstructTable[0xB1] = instr;
+
+    /// LDX
+    instr.code = &microMos6502::Op_LDX;
+    instr.addr = &microMos6502::IMM_Addr;
+    instr.cycles = 2;
+    InstructTable[0xA2] = instr;
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0xA6] = instr;
+
+    instr.addr = &microMos6502::ZEY_Addr;
+    instr.cycles = 4;
+    InstructTable[0xB6] = instr;
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0xAE] = instr;
+
+    instr.addr = &microMos6502::ABY_Addr;
+    instr.cycles = 4;
+    InstructTable[0xBE] = instr;
+
+    /// LDY
+    instr.code = &microMos6502::Op_LDY;
+    instr.addr = &microMos6502::IMM_Addr;
+    instr.cycles = 2;
+    InstructTable[0xA0] = instr;
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0xA4] = instr;
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 4;
+    InstructTable[0xB4] = instr;
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0xAC] = instr;
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 4;
+    InstructTable[0xBC] = instr;
+
+    /// LSR
+    instr.code = &microMos6502::Op_LSR;
+    instr.addr = &microMos6502::ACC_Addr;
+    instr.cycles = 2;
+    InstructTable[0x4A] = instr;
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 5;
+    InstructTable[0x46] = instr;
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 6;
+    InstructTable[0x56] = instr;
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 6;
+    InstructTable[0x4E] = instr;
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 7;
+    InstructTable[0x5E] = instr;
+
+    /// NOP
+    instr.code = &microMos6502::Op_NOP;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0xEA] = instr;
+
+    /// ORA
+    instr.code = &microMos6502::Op_ORA;
+    instr.addr = &microMos6502::IMM_Addr;
+    instr.cycles = 2;
+    InstructTable[0x09] = instr;
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0x05] = instr;
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 4;
+    InstructTable[0x15] = instr;
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0x0D] = instr;
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 4;
+    InstructTable[0x1D] = instr;
+
+    instr.addr = &microMos6502::ABY_Addr;
+    instr.cycles = 4;
+    InstructTable[0x19] = instr;
+
+    instr.addr = &microMos6502::INX_Addr;
+    instr.cycles = 6;
+    InstructTable[0x01] = instr;
+
+    instr.addr = &microMos6502::INY_Addr;
+    instr.cycles = 5;
+    InstructTable[0x11] = instr;
+
+    /// PHA
+    instr.code = &microMos6502::Op_PHA;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 3;
+    InstructTable[0x48] = instr;
+
+    /// PHP
+    instr.code = &microMos6502::Op_PHP;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 3;
+    InstructTable[0x08] = instr;
+
+    /// PLA
+    instr.code = &microMos6502::Op_PLA;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 3;
+    InstructTable[0x68] = instr;
+
+    /// PLP
+    instr.code = &microMos6502::Op_PLP;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 4;
+    InstructTable[0x28];
+
+    /// ROL
+    instr.code = &microMos6502::Op_ROL;
+    instr.addr = &microMos6502::ACC_Addr;
+    instr.cycles = 2;
+    InstructTable[0x2A] = instr;
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 5;
+    InstructTable[0x26] = instr;
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 6;
+    InstructTable[0x36] = instr;
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 6;
+    InstructTable[0x2E] = instr;
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 7;
+    InstructTable[0x3E] = instr;
+
+    /// ROR
+    instr.code = &microMos6502::Op_ROR;
+    instr.addr = &microMos6502::ACC_Addr;
+    instr.cycles = 2;
+    InstructTable[0x6A] = instr;
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 5;
+    InstructTable[0x66] = instr;
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 6;
+    InstructTable[0x76] = instr;
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 6;
+    InstructTable[0x6E] = instr;
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 7;
+    InstructTable[0x7E] = instr;
+
+    /// RTI
+    instr.code = &microMos6502::Op_RTI;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 6;
+    InstructTable[0x40] = instr;
+
+    /// RTS
+    instr.code = &microMos6502::Op_RTS;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 6;
+    InstructTable[0x60];
+
+    /// SBC
+    instr.code = &microMos6502::Op_SBC;
+    instr.addr = &microMos6502::IMM_Addr;
+    instr.cycles = 2;
+    InstructTable[0xE9];
+
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0xE5];
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 4;
+    InstructTable[0xF5];
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0xED];
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 4;
+    InstructTable[0xFD];
+
+    instr.addr = &microMos6502::ABY_Addr;
+    instr.cycles = 4;
+    InstructTable[0xF9];
+
+    instr.addr = &microMos6502::INX_Addr;
+    instr.cycles = 6;
+    InstructTable[0xE1];
+
+    instr.addr = &microMos6502::INY_Addr;
+    instr.cycles = 5;
+    InstructTable[0xF1];
+
+    /// SEC
+    instr.code = &microMos6502::Op_SEC;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0x38];
+
+    /// SED
+    instr.code = &microMos6502::Op_SED;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0xF8];
+
+    /// SEI
+    instr.code = &microMos6502::Op_SEI;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0x78];
+
+    /// STA
+    instr.code = &microMos6502::Op_STA;
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0x85];
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 4;
+    InstructTable[0x95];
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0x8D];
+
+    instr.addr = &microMos6502::ABX_Addr;
+    instr.cycles = 5;
+    InstructTable[0x9D];
+
+    instr.addr = &microMos6502::ABY_Addr;
+    instr.cycles = 5;
+    InstructTable[0x99];
+
+    instr.addr = &microMos6502::INX_Addr;
+    instr.cycles = 6;
+    InstructTable[0x81];
+
+    instr.addr = &microMos6502::INY_Addr;
+    instr.cycles = 6;
+    InstructTable[0x91];
+
+    /// STX
+    instr.code = &microMos6502::Op_STX;
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0x86];
+
+    instr.addr = &microMos6502::ZEY_Addr;
+    instr.cycles = 4;
+    InstructTable[0x96];
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0x8E];
+
+    /// STY
+    instr.code = &microMos6502::Op_STY;
+    instr.addr = &microMos6502::ZER_Addr;
+    instr.cycles = 3;
+    InstructTable[0x84];
+
+    instr.addr = &microMos6502::ZEX_Addr;
+    instr.cycles = 4;
+    InstructTable[0x94];
+
+    instr.addr = &microMos6502::ABS_Addr;
+    instr.cycles = 4;
+    InstructTable[0x8C];
+
+    /// TAX
+    instr.code = &microMos6502::Op_TAX;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0xAA];
+
+    /// TAY
+    instr.code = &microMos6502::Op_TAY;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0xA8];
+
+    /// TSX
+    instr.code = &microMos6502::Op_TSX;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0xBA];
+
+    /// TXA
+    instr.code = &microMos6502::Op_TXA;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0x8A];
+
+    /// TXS
+    instr.code = &microMos6502::Op_TXS;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0x9A];
+
+    /// TYA
+    instr.code = &microMos6502::Op_TYA;
+    instr.addr = &microMos6502::IMP_Addr;
+    instr.cycles = 2;
+    InstructTable[0x98];
 }
 
+
+void microMos6502::Op_ADC() {
+    bool carry = 0;
+
+    //microMos6502::A + microMos6502::
+}
 
 
 int main()
