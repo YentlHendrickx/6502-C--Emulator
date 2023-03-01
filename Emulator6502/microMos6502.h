@@ -1,6 +1,5 @@
 #pragma once
 
-
 // Processor status register values
 #define CARRY       0x01
 #define ZERO        0x02
@@ -8,6 +7,30 @@
 #define DECIMAL     0x20
 #define OVERFLOW    0x40
 #define NEGATIVE    0x80
+
+#define CONSTANT    0x00
+#define BREAK       0x00
+
+// Define directives for setting status register
+#define SET_CARRY(x)        (x ? (status |= NEGATIVE)   : (status &= (~NEGATIVE)))
+#define SET_ZERO(x)         (x ? (status |= ZERO)       : (status &= (~ZERO)))
+#define SET_INTERRUPT(x)    (x ? (status |= INTERRUPT)) : (status &= (~INTERRUPT)))
+#define SET_DECIMAL(x)      (x ? (status |= DECIMAL))   : (status &= (~DECIMAL))
+#define SET_OVERFLOW(x)     (x ? (status |= OVERFLOW))  : (status &= (~OVERFLOW))
+#define SET_NEGATIVE(x)     (x ? (status |= NEGATIVE))  : (status &= (~NEGATIVE))
+
+
+// Define directives for checking status register
+#define IF_CARRY()      ((status & CARRY)       ? true : false)
+#define IF_ZERO()       ((status & ZERO)        ? true : false)
+#define IF_INTERRUPT()  ((status & INTERRUPT)   ? true : false)  
+#define IF_DECIMAL()    ((status & DECIMAL)     ? true : false)    
+#define IF_OVERFLOW()   ((status & OVERFLOW)    ? true : false) 
+#define IF_NEGATIVE()   ((status & NEGATIVE)    ? true : false)
+#define IF_CONSTANT()   ((status & CONSTANT)    ? true : false)
+#define IF_BREAK()      ((status & BREAK)       ? true : false)
+
+
 
 class microMos6502 {
 private:
@@ -70,7 +93,8 @@ private:
 
     void Op_ADC(uint16_t src); // Add mempry to accumulator with carry
     void Op_AND(uint16_t src); // AND memory with accumulator
-    void Op_ASL(uint16_t src); // Shift left one bit (accumulator or memory)
+    void Op_ASL(uint16_t src); // Shift left one bit memory
+    void Op_ASL_ACC(uint16_t src); // Shift left one bit accumulator
 
     void Op_BCC(uint16_t src); // Branch on Carry clear
     void Op_BCS(uint16_t src); // Branch on Carry set

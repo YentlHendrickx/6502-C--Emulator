@@ -747,12 +747,286 @@ microMos6502::microMos6502(BusRead r, BusWrite w) {
     InstructTable[0x98];
 }
 
-
-void microMos6502::Op_ADC() {
-    bool carry = 0;
-
-    //microMos6502::A + microMos6502::
+/// MEMORY IMPLEMENTATION
+uint16_t microMos6502::ACC_Addr() {
+    // Not in use
+    return -1;
 }
+
+// Immediate addres -> progam counter
+uint16_t microMos6502::IMM_Addr() {
+    return pc++;
+}
+
+// Absolute addres, read pc counter get both low and high addres -> return address
+uint16_t microMos6502::ABS_Addr() {
+    uint16_t lowByte, highByte;
+
+    lowByte = Read(pc++);
+    highByte = Read(pc++);
+
+    return (lowByte + (highByte << 8))
+}
+
+// Zero addres -> get address at pc
+uint16_t microMos6502::ZER_Addr() {
+    return Read(pc++);
+}
+
+// Implied addres -> not in use
+uint16_t microMos6502::IMP_Addr() {
+    return 0;
+}
+
+// Relative address
+uint16_t microMos6502::REL_Addr() {
+    uint16_t offset
+
+    // Get offset from pc counter, apply offset if needed
+    offset = (uint16_t)Read(pc++);
+    if (offset & 0x80) offset |= 0xFF00;
+    
+    return (pc + (in16_t)offset);
+}
+
+/// STACK IMPLEMENTATION
+
+// Push to stack, 6502 has reverse stack with decreasing stack pointer
+void microMos6502::StackPush(uint8_t byte) {
+    // Write byte to stack address
+    Write(0x0100 + sp, byte);
+
+    // Wrap stack pointer if underflow
+    if (sp == 0x00) {
+        sp = 0xFF;
+    }
+    else {
+        // Decrement sp
+        sp--;
+    }
+}
+
+// Pop from stack, 6502 has reverse stack so stack pointer will be increased
+void microMos6502::StackPop() {
+    // Catch stack overflow
+    if (sp == 0xFF) {
+        // Wrap pointer
+        sp = 0x00;
+    }
+    else {
+        // Increment pointer
+        sp++;
+    }
+
+    // Read byte at current stack pointer location
+    return Read(0x0100 + sp);
+}
+
+/// OP CODE IMPLEMENTATIONS
+
+// ADC, Add Memory to Accumulator with Carry
+void microMos6502::Op_ADC(uint16_t src)
+{
+    // Get memory to add
+    uint8_t m = Read(src);
+
+    // Add and add current carry flag
+    unsigned int tmp = m + A + (IF_CARRY() ? 1 : 0);
+    
+    // Set zero status
+    SET_ZERO((tmp & 0xFF));
+
+    // If decimal set carry
+    if (IF_DECIMAL()) {
+        // In decimal mode operation uses BCD
+        if (((A & 0xF) + (m & 0xF) + (IF_CARRY() ? 1 : 0)) > 9) tmp += 6;
+        SET_NEGATIVE(tmp & 0x80);
+        SET_OVERFLOW(!((A ^ m) & 0x80) && ((A ^ tmp) & 0x80));
+
+        // for BCD
+        if (tmp > 0x99) {
+            tmp += 96;
+        }
+
+        SET_CARRY(tmp > 0x99);
+    } else {
+        // Set flags
+        SET_NEGATIVE(tmp & 0x80);
+        SET_OVERFLOW(!((A ^ m) & 0x80) && ((A ^ tmp) & 0x80));
+        SET_CARRY(tmp > 0xFF);
+    }
+
+    // Finally store mem to accumulator address
+    A = tmp & 0xFF;
+    return;
+}
+
+// AND, memory with accumulator
+void microMos6502::Op_AND(uint16_t src) {
+    // Get memory from location
+    uint16_t m = Read(src);
+
+    // Perform AND
+    uint8_t res = m & A;
+
+    // Set negative and zero flags
+    SET_NEGATIVE(res & 0x80);
+    SET_ZERO(!res);
+
+    return;
+}
+
+// ASL, shift left one bit
+void microMos6502::Op_ASL(uint16_t src) {
+    // Get mem from location
+    uint8_t m = Read(src);
+
+    // Set carry flags in status
+    SET_CARRY(m & 0x80);
+
+    // Shift, fill in low nibble
+    m <<= 1;
+    m &= 0xFF;
+
+    // Set flags
+    SET_NEGATIVE(m & 0x80);
+    SET_ZERO(!m);
+
+    // Write result to mem
+    Write(src, m);
+    return;
+}
+
+// Same as standard ASL but for ACC register
+void microMos6502::Op_ASL_ACC() {
+
+    uint8_t m = A;
+
+    // Set carry flags in status
+    SET_CARRY(m & 0x80);
+
+    // Shift, fill low nibble
+    m <<= 1;
+    m &= 0xFF;
+
+    // Set flags
+    SET_NEGATIVE(m & 0x80);
+    SET_ZERO(!m);
+
+    A = m;
+    return;
+}
+
+// BCC, branch on carry clear
+void microMos6502::Op_BCC(uint16_t src) {
+    // Set program counter to src -> jump
+    if (!IF_CARRY()) {
+        pc = src;
+    }
+
+    return;
+}
+
+// BCS, Branch on carry set
+void microMos6502::Op_BCS(uint16_t src) {
+    // Set program counter to src -> jump
+    if (IF_CARRY()) {
+        pc = src;
+    }
+    return;
+}
+
+// BEQ, Branch on result zero
+void microMos6502::Op_BEQ(uint16_t src) {
+    // Set program counter to src -> jump
+    if (IF_ZERO()) {
+        pc = src;
+    }
+    return;
+}
+
+// BIT, Test bits in memory with accumulator ???
+void microMos6502::Op_BIT() {
+    return;
+}
+
+// BMI, Branch on result minus
+void microMos6502::Op_BMI(uint16_t src) {
+    if (IF_NEGATIVE()) {
+        pc = src;
+    }
+    return;
+}
+
+// BNE, Branch on result not zero
+void microMos6502::Op_BNE(uint16_t src) {
+    if (!IF_ZERO()) {
+        pc = src;
+    }
+    return;
+}
+
+// BPL, Branch on result plus
+void microMos6502::Op_BPL(uint16_t src) {
+    if (!IF_NEGATIVE()) {
+        pc = src;
+    }
+    return;
+}
+
+// BRK, Force break
+void microMos6502::Op_BRK(uint16_t src) {
+
+    pc++;
+    StackPush((pc >> 8) & 0xFF);
+    StackPush(pc & 0xFF);
+    StackPush(status | CONSTANT | BREAK);
+    SET_INTERRUPT(1);
+    pc = (Read(irqVectorH) << 8) + Read(irqVectorL);
+
+    return;
+}
+
+// BVC, Branch on overflow clear
+void microMos6502::Op_BVC(uint16_t src) {
+    if (!IF_OVERFLOW()) {
+        pc = src;
+    }
+    return;
+}
+
+// BVS, Branch on overflow set
+void microMos6502::Op_BVS(uint16_t src) {
+    if (IF_OVERFLOW()) {
+        pc = src;
+    }
+    return;
+}
+
+// CLC, Clear carry flag
+void microMos6502::Op_CLC() {
+    SET_CARRY(0);
+    return;
+}
+
+// CLD, clear decimal mode
+void microMos6502::Op_CLI() {
+    SET_DECIMAL(0);
+    return;
+}
+
+// CLI, clear intterupt disable bit
+void microMos6502::Op_CLI() {
+    SET_INTERRUPT(0);
+    return;
+}
+
+// CLV, clear overflow flag
+void microMos6502::Op_CLV() {
+    SET_OVERFLOW(0);
+    return;
+}
+
 
 
 int main()
