@@ -1,6 +1,7 @@
 // Emulator6502.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+// Test for arch
 #include <iostream>
 #include "microMos6502.h"
 
