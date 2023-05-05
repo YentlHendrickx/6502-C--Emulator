@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 // Processor status register values
 #define CARRY       0x01
@@ -14,10 +15,10 @@
 // Define directives for setting status register
 #define SET_CARRY(x)        (x ? (status |= NEGATIVE)   : (status &= (~NEGATIVE)))
 #define SET_ZERO(x)         (x ? (status |= ZERO)       : (status &= (~ZERO)))
-#define SET_INTERRUPT(x)    (x ? (status |= INTERRUPT)) : (status &= (~INTERRUPT)))
-#define SET_DECIMAL(x)      (x ? (status |= DECIMAL))   : (status &= (~DECIMAL))
-#define SET_OVERFLOW(x)     (x ? (status |= OVERFLOW))  : (status &= (~OVERFLOW))
-#define SET_NEGATIVE(x)     (x ? (status |= NEGATIVE))  : (status &= (~NEGATIVE))
+#define SET_INTERRUPT(x)    (x ? (status |= INTERRUPT) : (status &= (~INTERRUPT)))
+#define SET_DECIMAL(x)      (x ? (status |= DECIMAL)   : (status &= (~DECIMAL)))
+#define SET_OVERFLOW(x)     (x ? (status |= OVERFLOW)  : (status &= (~OVERFLOW)))
+#define SET_NEGATIVE(x)     (x ? (status |= NEGATIVE)  : (status &= (~NEGATIVE)))
 
 
 // Define directives for checking status register
@@ -64,7 +65,7 @@ private:
     Instruct InstructTable[256];
 
     // Execute instruction
-    void Exec(Instruction i);
+    void Exec(Instruct i);
 
     /// Addressing modes
     //http://www.emulator101.com/6502-addressing-modes.html
@@ -183,8 +184,8 @@ private:
     /// Read and write callbacks
     typedef void    (*BusWrite)(uint16_t, uint8_t);
     typedef uint8_t(*BusRead)(uint16_t);
-    BusWrite write;
-    BusRead read;
+    BusWrite Write;
+    BusRead Read;
 
     /// Stack ops
     void StackPush(uint8_t byte);

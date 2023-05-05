@@ -1,14 +1,12 @@
 // Emulator6502.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
-// Test for arch
 #include <iostream>
 #include "microMos6502.h"
 
 microMos6502::microMos6502(BusRead r, BusWrite w) {
     
     Write = (BusWrite)w;
-    Read = (BusRead);
+    Read = (BusRead)r;
 
     Instruct instr;
 
@@ -543,7 +541,7 @@ microMos6502::microMos6502(BusRead r, BusWrite w) {
     instr.code = &microMos6502::Op_PLP;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 4;
-    InstructTable[0x28];
+    InstructTable[0x28] = instr;
 
     /// ROL
     instr.code = &microMos6502::Op_ROL;
@@ -599,153 +597,153 @@ microMos6502::microMos6502(BusRead r, BusWrite w) {
     instr.code = &microMos6502::Op_RTS;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 6;
-    InstructTable[0x60];
+    InstructTable[0x60] = instr;
 
     /// SBC
     instr.code = &microMos6502::Op_SBC;
     instr.addr = &microMos6502::IMM_Addr;
     instr.cycles = 2;
-    InstructTable[0xE9];
+    InstructTable[0xE9] = instr;
 
     instr.addr = &microMos6502::ZER_Addr;
     instr.cycles = 3;
-    InstructTable[0xE5];
+    InstructTable[0xE5] = instr;
 
     instr.addr = &microMos6502::ZEX_Addr;
     instr.cycles = 4;
-    InstructTable[0xF5];
+    InstructTable[0xF5] = instr;
 
     instr.addr = &microMos6502::ABS_Addr;
     instr.cycles = 4;
-    InstructTable[0xED];
+    InstructTable[0xED] = instr;
 
     instr.addr = &microMos6502::ABX_Addr;
     instr.cycles = 4;
-    InstructTable[0xFD];
+    InstructTable[0xFD] = instr;
 
     instr.addr = &microMos6502::ABY_Addr;
     instr.cycles = 4;
-    InstructTable[0xF9];
+    InstructTable[0xF9] = instr;
 
     instr.addr = &microMos6502::INX_Addr;
     instr.cycles = 6;
-    InstructTable[0xE1];
+    InstructTable[0xE1] = instr;
 
     instr.addr = &microMos6502::INY_Addr;
     instr.cycles = 5;
-    InstructTable[0xF1];
+    InstructTable[0xF1] = instr;
 
     /// SEC
     instr.code = &microMos6502::Op_SEC;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0x38];
+    InstructTable[0x38] = instr;
 
     /// SED
     instr.code = &microMos6502::Op_SED;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0xF8];
+    InstructTable[0xF8] = instr;
 
     /// SEI
     instr.code = &microMos6502::Op_SEI;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0x78];
+    InstructTable[0x78] = instr;
 
     /// STA
     instr.code = &microMos6502::Op_STA;
     instr.addr = &microMos6502::ZER_Addr;
     instr.cycles = 3;
-    InstructTable[0x85];
+    InstructTable[0x85] = instr; 
 
     instr.addr = &microMos6502::ZEX_Addr;
     instr.cycles = 4;
-    InstructTable[0x95];
+    InstructTable[0x95] = instr;
 
     instr.addr = &microMos6502::ABS_Addr;
     instr.cycles = 4;
-    InstructTable[0x8D];
+    InstructTable[0x8D] = instr;
 
     instr.addr = &microMos6502::ABX_Addr;
     instr.cycles = 5;
-    InstructTable[0x9D];
+    InstructTable[0x9D] = instr;
 
     instr.addr = &microMos6502::ABY_Addr;
     instr.cycles = 5;
-    InstructTable[0x99];
+    InstructTable[0x99] = instr;
 
     instr.addr = &microMos6502::INX_Addr;
     instr.cycles = 6;
-    InstructTable[0x81];
+    InstructTable[0x81] = instr;
 
     instr.addr = &microMos6502::INY_Addr;
     instr.cycles = 6;
-    InstructTable[0x91];
+    InstructTable[0x91] = instr;
 
     /// STX
     instr.code = &microMos6502::Op_STX;
     instr.addr = &microMos6502::ZER_Addr;
     instr.cycles = 3;
-    InstructTable[0x86];
+    InstructTable[0x86] = instr;
 
     instr.addr = &microMos6502::ZEY_Addr;
     instr.cycles = 4;
-    InstructTable[0x96];
+    InstructTable[0x96] = instr;
 
     instr.addr = &microMos6502::ABS_Addr;
     instr.cycles = 4;
-    InstructTable[0x8E];
+    InstructTable[0x8E] = instr;
 
     /// STY
     instr.code = &microMos6502::Op_STY;
     instr.addr = &microMos6502::ZER_Addr;
     instr.cycles = 3;
-    InstructTable[0x84];
+    InstructTable[0x84] = instr;
 
     instr.addr = &microMos6502::ZEX_Addr;
     instr.cycles = 4;
-    InstructTable[0x94];
+    InstructTable[0x94] = instr;
 
     instr.addr = &microMos6502::ABS_Addr;
     instr.cycles = 4;
-    InstructTable[0x8C];
+    InstructTable[0x8C] = instr;
 
     /// TAX
     instr.code = &microMos6502::Op_TAX;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0xAA];
+    InstructTable[0xAA] = instr;
 
     /// TAY
     instr.code = &microMos6502::Op_TAY;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0xA8];
+    InstructTable[0xA8] = instr;
 
     /// TSX
     instr.code = &microMos6502::Op_TSX;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0xBA];
+    InstructTable[0xBA] = instr;
 
     /// TXA
     instr.code = &microMos6502::Op_TXA;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0x8A];
+    InstructTable[0x8A] = instr;
 
     /// TXS
     instr.code = &microMos6502::Op_TXS;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0x9A];
+    InstructTable[0x9A] = instr;
 
     /// TYA
     instr.code = &microMos6502::Op_TYA;
     instr.addr = &microMos6502::IMP_Addr;
     instr.cycles = 2;
-    InstructTable[0x98];
+    InstructTable[0x98] = instr;
 }
 
 /// MEMORY IMPLEMENTATION
@@ -766,7 +764,7 @@ uint16_t microMos6502::ABS_Addr() {
     lowByte = Read(pc++);
     highByte = Read(pc++);
 
-    return (lowByte + (highByte << 8))
+    return (lowByte + (highByte << 8));
 }
 
 // Zero addres -> get address at pc
@@ -781,20 +779,19 @@ uint16_t microMos6502::IMP_Addr() {
 
 // Relative address
 uint16_t microMos6502::REL_Addr() {
-    uint16_t offset
+    uint16_t offset;
 
     // Get offset from pc counter, apply offset if needed
     offset = (uint16_t)Read(pc++);
     if (offset & 0x80) offset |= 0xFF00;
     
-    return (pc + (in16_t)offset);
+    return (pc + (int16_t)offset);
 }
 
 /// STACK IMPLEMENTATION
 
-// Push to stack, 6502 has reverse stack with decreasing stack pointer
+// Push to stack, 6502 has reverse stack so stack pointer will be decremented
 void microMos6502::StackPush(uint8_t byte) {
-    // Write byte to stack address
     Write(0x0100 + sp, byte);
 
     // Wrap stack pointer if underflow
@@ -802,24 +799,22 @@ void microMos6502::StackPush(uint8_t byte) {
         sp = 0xFF;
     }
     else {
-        // Decrement sp
         sp--;
     }
 }
 
-// Pop from stack, 6502 has reverse stack so stack pointer will be increased
-void microMos6502::StackPop() {
+// Pop from stack, 6502 has reverse stack so stack pointer will be incremented
+uint8_t microMos6502::StackPop() {
     // Catch stack overflow
     if (sp == 0xFF) {
         // Wrap pointer
         sp = 0x00;
     }
     else {
-        // Increment pointer
         sp++;
     }
 
-    // Read byte at current stack pointer location
+    // Return byte at current sp
     return Read(0x0100 + sp);
 }
 
@@ -828,16 +823,14 @@ void microMos6502::StackPop() {
 // ADC, Add Memory to Accumulator with Carry
 void microMos6502::Op_ADC(uint16_t src)
 {
-    // Get memory to add
     uint8_t m = Read(src);
 
     // Add and add current carry flag
     unsigned int tmp = m + A + (IF_CARRY() ? 1 : 0);
     
-    // Set zero status
     SET_ZERO((tmp & 0xFF));
 
-    // If decimal set carry
+    // If decimal, set carry
     if (IF_DECIMAL()) {
         // In decimal mode operation uses BCD
         if (((A & 0xF) + (m & 0xF) + (IF_CARRY() ? 1 : 0)) > 9) tmp += 6;
@@ -899,7 +892,7 @@ void microMos6502::Op_ASL(uint16_t src) {
 }
 
 // Same as standard ASL but for ACC register
-void microMos6502::Op_ASL_ACC() {
+void microMos6502::Op_ASL_ACC(uint16_t src) {
 
     uint8_t m = A;
 
@@ -947,7 +940,7 @@ void microMos6502::Op_BEQ(uint16_t src) {
 }
 
 // BIT, Test bits in memory with accumulator ???
-void microMos6502::Op_BIT() {
+void microMos6502::Op_BIT(uint16_t src) {
     return;
 }
 
@@ -1005,29 +998,28 @@ void microMos6502::Op_BVS(uint16_t src) {
 }
 
 // CLC, Clear carry flag
-void microMos6502::Op_CLC() {
+void microMos6502::Op_CLC(uint16_t src) {
     SET_CARRY(0);
     return;
 }
 
 // CLD, clear decimal mode
-void microMos6502::Op_CLI() {
+void microMos6502::Op_CLD(uint16_t src) {
     SET_DECIMAL(0);
     return;
 }
 
 // CLI, clear intterupt disable bit
-void microMos6502::Op_CLI() {
+void microMos6502::Op_CLI(uint16_t src) {
     SET_INTERRUPT(0);
     return;
 }
 
 // CLV, clear overflow flag
-void microMos6502::Op_CLV() {
+void microMos6502::Op_CLV(uint16_t src) {
     SET_OVERFLOW(0);
     return;
 }
-
 
 
 int main()
